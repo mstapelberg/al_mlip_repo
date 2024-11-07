@@ -3,6 +3,7 @@ from ase import Atoms
 from ase.io import read, write
 from ase.calculators.vasp import Vasp
 from ase.stress import full_3x3_to_voigt_6_stress
+from datetime import datetime
 
 def setup_environment():
     # Set up environment variables
@@ -83,74 +84,6 @@ def get_vasp_potential(symbol):
     else:
         raise FileNotFoundError(f"No pseudopotential found for {symbol} in {pbe_path}")
 
-
-
-def _run_static_vasp(atoms, output_dir, all_results_file):
-    if os.path.exists(os.path.join(output_dir,'result.extxyz')):
-        print(f"Job in {output_dir} is already complete. Skipping.")
-        return
-    # Check pseudopotentials before setting up the calculator
-    unique_elements = set(atoms.get_chemical_symbols())
-    check_pseudopotentials(unique_elements)
-
-    # Determine appropriate setups for each element
-    setups = {symbol: get_vasp_potential(symbol) for symbol in unique_elements}
-    
-    # VASP calculator settings
-    calc = Vasp(command="/home/myless/Packages/hpc_sdk/Linux_x86_64/22.5/comm_libs/mpi/bin/mpirun /home/myless/VASP/vasp.6.4.2/bin/vasp_std",
-        prec='Accurate',
-        encut=550,
-        ediff=1e-6,
-        ediffg=-0.01,
-        nelm=100,
-        nsw=0,
-        ibrion=-1,
-        ismear=1,
-        sigma=0.2,
-        lcharg=False,
-        lwave=False,
-        lreal=False,
-        lorbit=11,
-        xc='PBE',
-        kpts=(4, 4, 4),
-        setups=setups,
-        directory=output_dir,
-        
-        # GPU-specific settings
-        algo='Normal',
-    )
-    
-    # Set environment variables for GPU calculation
-    #os.environ['VASP_GPU_NCL'] = '1'
-    #os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-    
-    atoms.calc = calc
-    
-    # Run the calculation
-    try:
-        energy = atoms.get_potential_energy()
-        forces = atoms.get_forces()
-        stress = atoms.get_stress(voigt=False)
-        
-        # Convert stress to 3x3 matrix for ASE compatibility
-        #stress_matrix = full_3x3_to_voigt_6_stress(stress)
-        
-        # Add results to the Atoms object
-        atoms.info['ENGRAD_energy'] = energy
-        atoms.arrays['ENGRAD_forces'] = forces
-        atoms.info['ENGRAD_stress'] = stress
-        
-        # Save results as extXYZ in the job directory
-        job_results_file = os.path.join(output_dir, 'result.extxyz')
-        write(job_results_file, atoms, format='extxyz')
-        
-        # Append results to the all_results file
-        write(all_results_file, atoms, format='extxyz', append=True)
-        
-        print(f"Calculation completed for {output_dir}")
-    except Exception as e:
-        print(f"Error in calculation for {output_dir}: {str(e)}")
-
 def run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=False):
     if os.path.exists(os.path.join(output_dir,'result.extxyz')) and not create_inputs_only:
         print(f"Job in {output_dir} is already complete. Skipping.")
@@ -179,7 +112,7 @@ def run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=Fals
         lreal=False,
         lorbit=11,
         xc='PBE',
-        kpts=(3, 3, 3),
+        kpts=(4, 4, 4),
         setups=setups,
         directory=output_dir,
         # GPU-specific settings
@@ -219,11 +152,10 @@ def run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=Fals
 def main():
     setup_environment()  # Call this at the beginning of main
 
-    #input_directory = 'Mace_Active_Learning/Force_Variance_Optimization_GPU_T3'
-
-    base_output_dir = 'vasp_jobs/v-cr-ti/'
+    base_output_dir = '../vasp_jobs/zr-w-v-ti-cr/'
     job_generation = 1
-    job_directory = os.path.join(base_output_dir, f'job_gen_{job_generation}')
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    job_directory = os.path.join(base_output_dir, f'job_gen_{job_generation}-{current_date}')
 
     # Create base output directory
     if not os.path.exists(base_output_dir):
@@ -237,8 +169,8 @@ def main():
     # get a list of all structures (they are .xyz files)
     #xyz_files = [f for f in os.listdir(input_directory) if f.endswith('.xyz')]
     #atoms_list = [read(os.path.join(input_directory, file)) for file in xyz_files]
-    data_path = 'data/v-cr-ti/combined_gen_0_fixed.xyz'
-    atoms_list = read(data_path, index=':', format='extxyz')
+    data_path = '../data/zr-w-v-ti-cr/gen_0_2024-11-06/md_frames/gen_0_idx-2_comp-V124_temp-1000_md.xyz'
+    atoms_list = read(data_path, index='10:', format='extxyz')
     
     # Run calculations for each structure
     for i, atoms in enumerate(atoms_list):
