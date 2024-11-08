@@ -150,6 +150,7 @@ s
     except Exception as e:
         print(f"Error in calculation for {output_dir}: {str(e)}")
 
+"""
 def main():
     setup_environment()  # Call this at the beginning of main
 
@@ -168,19 +169,80 @@ def main():
     all_results_file = os.path.join(base_output_dir, f'job_gen_{job_generation}','all_results.extxyz')
     
     # get a list of all structures (they are .xyz files)
-    #xyz_files = [f for f in os.listdir(input_directory) if f.endswith('.xyz')]
-    #atoms_list = [read(os.path.join(input_directory, file)) for file in xyz_files]
     data_path = '../data/zr-w-v-ti-cr/gen_0_2024-11-06/md_frames/gen_0_idx-2_comp-V124_temp-1000_md.xyz'
-    atoms_list = read(data_path, index='10:', format='extxyz')
+    atoms_list = read(data_path, index='1:', format='extxyz')
     
     # Run calculations for each structure
     for i, atoms in enumerate(atoms_list):
-        output_dir = os.path.join(job_directory, f'job_{i}')
+        output_dir = os.path.join(job_directory, f'structure_{i}_')
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
         
         run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=True)
+
+"""
+
+
+import os
+from datetime import datetime
+import re
+from ase.io import read
+from glob import glob
+
+def parse_xyz_filename(filename):
+    # Extract information using regex
+    pattern = r'gen_\d+_idx-(\d+)_comp-([A-Za-z0-9]+)_temp-(\d+)_md\.xyz'
+    match = re.match(pattern, os.path.basename(filename))
+    if match:
+        idx = match.group(1)
+        comp = match.group(2)
+        temp = match.group(3)
+        return idx, comp, temp
+    return None, None, None
+
+def main():
+    setup_environment()  # Call this at the beginning of main
+    base_output_dir = '../vasp_jobs/zr-w-v-ti-cr/'
+    job_generation = 1
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    job_directory = os.path.join(base_output_dir, f'job_gen_{job_generation}-{current_date}')
+    
+    # Create base output directory
+    if not os.path.exists(base_output_dir):
+        os.makedirs(base_output_dir)
+    # Create job directory
+    if not os.path.exists(job_directory):
+        os.makedirs(job_directory)
+        
+    all_results_file = os.path.join(base_output_dir, f'job_gen_{job_generation}','all_results.extxyz')
+    
+    # Directory containing xyz files
+    xyz_directory = '../data/zr-w-v-ti-cr/gen_0_2024-11-06/md_frames/'
+    
+    # Get all xyz files in the directory
+    xyz_files = glob(os.path.join(xyz_directory, '*.xyz'))
+    
+    # Process each xyz file
+    for xyz_file in xyz_files:
+        # Parse filename to get metadata
+        idx, comp, temp = parse_xyz_filename(xyz_file)
+        if idx is None:
+            print(f"Warning: Could not parse filename {xyz_file}, skipping...")
+            continue
+            
+        # Read all frames from the xyz file
+        atoms_list = read(xyz_file, index='1:', format='extxyz')
+        
+        # Process each frame
+        for i, atoms in enumerate(atoms_list):
+            output_dir = os.path.join(
+                job_directory, 
+                f'structure_{i}_idx_{idx}_comp_{comp}_temp_{temp}'
+            )
+            if not os.path.exists(output_dir):
+                os.makedirs(output_dir)
+            run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=True)
 
 if __name__ == "__main__":
     main()
