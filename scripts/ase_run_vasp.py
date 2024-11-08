@@ -137,7 +137,8 @@ def run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=Fals
         # Add results to the Atoms object
         atoms.info['ENGRAD_energy'] = energy
         atoms.arrays['ENGRAD_forces'] = forces
-        atoms.info['ENGRAD_stress'] = stress
+        atoms.info['ENGRAD_stress'] = stres_
+s
         
         # Save results as extXYZ in the job directory
         job_results_file = os.path.join(output_dir, 'result.extxyz')
