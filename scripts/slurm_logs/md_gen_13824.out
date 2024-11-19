@@ -1,0 +1,9 @@
+Loaded 1 structures from ../data/zr-w-v-ti-cr/gen_3_2024-11-11/gen_3_2024-11-11_initial_configs_part11.xyz
+Running committee mace with 3 models
+Skipping /home/myless/Packages/al_mlip_repo/scripts/../data/zr-w-v-ti-cr/gen_3_2024-11-10/md_frames/gen_0_idx-0_comp-Cr4Ti4V102WZr13_temp-1000_md.xyz - file already exists
+Running committee mace with 3 models
+Running MD for structure 0 at 2000K
+MD finished in 1.34 minutes!
+Running committee mace with 3 models
+Running MD for structure 0 at 3000K
+MD finished in 1.30 minutes!

@@ -1,0 +1,12 @@
+Processing file: ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/analysis_output/structures/structure_018_V0.747_Cr0.038_Ti0.065_W0.012_Zr0.137.xyz
+Array Task ID: 18
+Job ID: 14097
+Total number of files: 25
+Task 18: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 18: Running MD at 1000K for structure_018_V0.747_Cr0.038_Ti0.065_W0.012_Zr0.137
+MD finished in 1.32 minutes!
+Task 18: Running MD at 2000K for structure_018_V0.747_Cr0.038_Ti0.065_W0.012_Zr0.137
+MD finished in 0.98 minutes!
+Task 18: Running MD at 3000K for structure_018_V0.747_Cr0.038_Ti0.065_W0.012_Zr0.137
+MD finished in 0.97 minutes!

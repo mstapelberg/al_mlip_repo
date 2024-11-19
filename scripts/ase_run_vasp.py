@@ -113,6 +113,7 @@ def run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=Fals
         lorbit=11,
         xc='PBE',
         kpts=(4, 4, 4),
+        gamma=True,
         setups=setups,
         directory=output_dir,
         # GPU-specific settings
@@ -137,8 +138,7 @@ def run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=Fals
         # Add results to the Atoms object
         atoms.info['ENGRAD_energy'] = energy
         atoms.arrays['ENGRAD_forces'] = forces
-        atoms.info['ENGRAD_stress'] = stres_
-s
+        atoms.info['ENGRAD_stress'] = stress
         
         # Save results as extXYZ in the job directory
         job_results_file = os.path.join(output_dir, 'result.extxyz')
@@ -150,98 +150,91 @@ s
     except Exception as e:
         print(f"Error in calculation for {output_dir}: {str(e)}")
 
-"""
-def main():
-    setup_environment()  # Call this at the beginning of main
-
-    base_output_dir = '../vasp_jobs/zr-w-v-ti-cr/'
-    job_generation = 1
-    current_date = datetime.now().strftime('%Y-%m-%d')
-    job_directory = os.path.join(base_output_dir, f'job_gen_{job_generation}-{current_date}')
-
-    # Create base output directory
-    if not os.path.exists(base_output_dir):
-        os.makedirs(base_output_dir)
-    # Create job directory
-    if not os.path.exists(job_directory):
-        os.makedirs(job_directory)
-
-    all_results_file = os.path.join(base_output_dir, f'job_gen_{job_generation}','all_results.extxyz')
-    
-    # get a list of all structures (they are .xyz files)
-    data_path = '../data/zr-w-v-ti-cr/gen_0_2024-11-06/md_frames/gen_0_idx-2_comp-V124_temp-1000_md.xyz'
-    atoms_list = read(data_path, index='1:', format='extxyz')
-    
-    # Run calculations for each structure
-    for i, atoms in enumerate(atoms_list):
-        output_dir = os.path.join(job_directory, f'structure_{i}_')
-
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        
-        run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=True)
-
-"""
-
-
-import os
 from datetime import datetime
 import re
 from ase.io import read
 from glob import glob
 
 def parse_xyz_filename(filename):
-    # Extract information using regex
-    pattern = r'gen_\d+_idx-(\d+)_comp-([A-Za-z0-9]+)_temp-(\d+)_md\.xyz'
-    match = re.match(pattern, os.path.basename(filename))
-    if match:
-        idx = match.group(1)
-        comp = match.group(2)
-        temp = match.group(3)
-        return idx, comp, temp
-    return None, None, None
+    """
+    Parse different types of XYZ filenames:
+    1. MD simulation files: structure_021_V0.861_Cr0.032_Ti0.012_W0.047_Zr0.048_T3000_md.xyz
+    2. Adversarial files: 
+       - neb_unfinished_fin_2_structure_1768_step_0_adversarial.xyz
+       - vac_structure_924_step_0_adversarial.xyz
+    
+    Returns:
+        tuple: (idx, comp, temp, file_type, source_folder)
+        - For MD files: (idx number, composition, temperature, "md", None)
+        - For adversarial files: (structure number, None, None, "adversarial", source_folder)
+    """
+    basename = os.path.basename(filename)
+    
+    # Pattern for new MD simulation files
+    md_pattern = r'structure_(\d+)_([V0-9._CrTiWZ]+)_T(\d+)_md\.xyz'
+    md_match = re.match(md_pattern, basename)
+    
+    # Pattern for adversarial files
+    adv_pattern = r'(.+?)_structure_(\d+)_step_\d+_adversarial\.xyz'
+    adv_match = re.match(adv_pattern, basename)
+    
+    if md_match:
+        idx = md_match.group(1)          # Structure index (e.g., '021')
+        comp = md_match.group(2)         # Full composition string
+        temp = md_match.group(3)         # Temperature value
+        return idx, comp, temp, "md", None
+    elif adv_match:
+        source_folder = adv_match.group(1)  # Everything before "structure"
+        structure_num = adv_match.group(2)   # Structure number
+        return structure_num, None, None, "adversarial", source_folder
+    
+    return None, None, None, None, None
 
 def main():
-    setup_environment()  # Call this at the beginning of main
+    setup_environment()
     base_output_dir = '../vasp_jobs/zr-w-v-ti-cr/'
-    job_generation = 1
+    job_generation = 5
     current_date = datetime.now().strftime('%Y-%m-%d')
     job_directory = os.path.join(base_output_dir, f'job_gen_{job_generation}-{current_date}')
-    
-    # Create base output directory
-    if not os.path.exists(base_output_dir):
-        os.makedirs(base_output_dir)
-    # Create job directory
-    if not os.path.exists(job_directory):
-        os.makedirs(job_directory)
-        
+
+    # Create directories
+    os.makedirs(base_output_dir, exist_ok=True)
+    os.makedirs(job_directory, exist_ok=True)
+
     all_results_file = os.path.join(base_output_dir, f'job_gen_{job_generation}','all_results.extxyz')
-    
-    # Directory containing xyz files
-    xyz_directory = '../data/zr-w-v-ti-cr/gen_0_2024-11-06/md_frames/'
+    #xyz_directory = '/home/myless/Packages/al_mlip_repo/data/zr-w-v-ti-cr/gen_1_2024-11-09/aa_out/'
+    xyz_directory = '/home/myless/Packages/al_mlip_repo/data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/'
     
     # Get all xyz files in the directory
     xyz_files = glob(os.path.join(xyz_directory, '*.xyz'))
-    
+
     # Process each xyz file
     for xyz_file in xyz_files:
         # Parse filename to get metadata
-        idx, comp, temp = parse_xyz_filename(xyz_file)
+        idx, comp, temp, file_type, source_folder = parse_xyz_filename(xyz_file)
+        
         if idx is None:
             print(f"Warning: Could not parse filename {xyz_file}, skipping...")
             continue
-            
+
         # Read all frames from the xyz file
         atoms_list = read(xyz_file, index='1:', format='extxyz')
-        
+
         # Process each frame
         for i, atoms in enumerate(atoms_list):
-            output_dir = os.path.join(
-                job_directory, 
-                f'structure_{i}_idx_{idx}_comp_{comp}_temp_{temp}'
-            )
-            if not os.path.exists(output_dir):
-                os.makedirs(output_dir)
+            # Create output directory name based on file type
+            if file_type == "md":
+                output_dir = os.path.join(
+                    job_directory,
+                    f'structure_{i}_idx_{idx}_comp_{comp}_temp_{temp}'
+                )
+            else:  # adversarial
+                output_dir = os.path.join(
+                    job_directory,
+                    f'structure_{i}_{source_folder}_adversarial_{idx}'
+                )
+                
+            os.makedirs(output_dir, exist_ok=True)
             run_static_vasp(atoms, output_dir, all_results_file, create_inputs_only=True)
 
 if __name__ == "__main__":

@@ -12,7 +12,7 @@ from tqdm import tqdm
 #from displacement_generator import DisplacementGenerator
 #from adversarial_optimizer import AdversarialOptimizer
 import sys
-sys.path.append('../Modules')
+sys.path.append('../../Modules')
 from al_functions import AdversarialCalculator, DisplacementGenerator, AdversarialOptimizer
 
 def calculate_structure_variances(

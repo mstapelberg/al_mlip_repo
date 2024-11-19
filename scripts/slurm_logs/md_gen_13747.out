@@ -1,0 +1,52 @@
+Loaded 9 structures from ../data/zr-w-v-ti-cr/gen_0_2024-11-06/gen_1_2024-11-07_split_configs/gen_1_2024-11-07_initial_configs_part5.xyz
+Running committee mace with 5 models
+Running MD for structure 0 at 2000K
+MD finished in 2.01 minutes!
+Running committee mace with 5 models
+Running MD for structure 1 at 2000K
+MD finished in 1.97 minutes!
+Running committee mace with 5 models
+Skipping /home/myless/Packages/al_mlip_repo/scripts/../data/zr-w-v-ti-cr/gen_0_2024-11-06/md_frames/gen_0_idx-2_comp-V124_temp-2000_md.xyz - file already exists
+Running committee mace with 5 models
+Running MD for structure 3 at 2000K
+MD finished in 1.97 minutes!
+Running committee mace with 5 models
+Running MD for structure 4 at 2000K
+MD finished in 1.98 minutes!
+Running committee mace with 5 models
+Running MD for structure 5 at 2000K
+MD finished in 1.98 minutes!
+Running committee mace with 5 models
+Running MD for structure 6 at 2000K
+MD finished in 1.97 minutes!
+Running committee mace with 5 models
+Running MD for structure 7 at 2000K
+MD finished in 1.97 minutes!
+Running committee mace with 5 models
+Running MD for structure 8 at 2000K
+MD finished in 1.97 minutes!
+Running committee mace with 5 models
+Running MD for structure 0 at 3000K
+MD finished in 1.96 minutes!
+Running committee mace with 5 models
+Running MD for structure 1 at 3000K
+MD finished in 1.97 minutes!
+Running committee mace with 5 models
+Skipping /home/myless/Packages/al_mlip_repo/scripts/../data/zr-w-v-ti-cr/gen_0_2024-11-06/md_frames/gen_0_idx-2_comp-V124_temp-3000_md.xyz - file already exists
+Running committee mace with 5 models
+Skipping /home/myless/Packages/al_mlip_repo/scripts/../data/zr-w-v-ti-cr/gen_0_2024-11-06/md_frames/gen_0_idx-3_comp-V124_temp-3000_md.xyz - file already exists
+Running committee mace with 5 models
+Running MD for structure 4 at 3000K
+MD finished in 1.97 minutes!
+Running committee mace with 5 models
+Running MD for structure 5 at 3000K
+MD finished in 1.96 minutes!
+Running committee mace with 5 models
+Running MD for structure 6 at 3000K
+MD finished in 1.96 minutes!
+Running committee mace with 5 models
+Running MD for structure 7 at 3000K
+MD finished in 1.97 minutes!
+Running committee mace with 5 models
+Running MD for structure 8 at 3000K
+MD finished in 1.96 minutes!

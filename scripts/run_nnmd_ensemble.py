@@ -32,6 +32,289 @@ import time
 import numpy as np
 import pylab as pl
 from IPython import display
+import os
+import sys
+import json
+import random
+import numpy as np
+from typing import List, Dict, Tuple, Optional
+from pathlib import Path
+import matplotlib
+matplotlib.use('Agg')  # For headless environments
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.manifold import TSNE
+from sklearn.cluster import KMeans
+from dataclasses import dataclass
+import pandas as pd
+from collections import defaultdict
+from ase.io import read, write
+from ase import Atoms, units
+from ase.md.langevin import Langevin
+from ase.md.velocitydistribution import (
+    Stationary,
+    ZeroRotation,
+    MaxwellBoltzmannDistribution
+)
+from mace.calculators import MACECalculator
+
+import sys
+sys.path.append('../Modules')
+from al_functions import AdversarialCalculator, DisplacementGenerator, AdversarialOptimizer
+
+@dataclass
+class CompositionStats:
+    mean_variance: float
+    median_variance: float
+    q95_variance: float
+    max_variance: float
+    min_variance: float
+    clusters_stats: Dict[int, Dict[str, float]]
+
+class CompositionVisualizer:
+    def __init__(self, output_dir: str):
+        """Initialize visualizer with output directory."""
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+        
+    def plot_tsne_clusters(self, 
+                          embedding: np.ndarray, 
+                          clusters: np.ndarray,
+                          compositions: np.ndarray,
+                          selected_points: Optional[np.ndarray] = None):
+        """
+        Plot t-SNE embedding with cluster assignments and compositions.
+        
+        Args:
+            embedding: t-SNE embedding array (n_samples, 2)
+            clusters: Cluster assignments
+            compositions: Original composition array
+            selected_points: Indices of selected compositions
+        """
+        plt.figure(figsize=(15, 10))
+        
+        # Create main scatter plot
+        scatter = plt.scatter(embedding[:, 0], embedding[:, 1], 
+                            c=clusters, cmap='viridis',
+                            alpha=0.6)
+        
+        # Add colorbar
+        plt.colorbar(scatter, label='Cluster')
+        
+        # Highlight selected points if provided
+        if selected_points is not None:
+            plt.scatter(embedding[selected_points, 0], 
+                       embedding[selected_points, 1],
+                       color='red', marker='*', s=200,
+                       label='Selected Compositions')
+        
+        plt.title('t-SNE Visualization of Composition Space')
+        plt.xlabel('t-SNE 1')
+        plt.ylabel('t-SNE 2')
+        plt.legend()
+        
+        # Save plot
+        plt.savefig(self.output_dir / 'tsne_clusters.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        
+        # Create composition heatmap
+        self._plot_composition_heatmap(compositions, clusters)
+        
+    def _plot_composition_heatmap(self, compositions: np.ndarray, clusters: np.ndarray):
+        """Create heatmap of average compositions per cluster."""
+        cluster_compositions = defaultdict(list)
+        for comp, cluster in zip(compositions, clusters):
+            cluster_compositions[cluster].append(comp)
+            
+        # Calculate mean compositions per cluster
+        mean_compositions = {
+            cluster: np.mean(comps, axis=0) 
+            for cluster, comps in cluster_compositions.items()
+        }
+        
+        # Create DataFrame for heatmap
+        df_data = pd.DataFrame(
+            mean_compositions.values(),
+            index=mean_compositions.keys(),
+            columns=['V', 'Cr', 'Ti', 'W', 'Zr']
+        )
+        
+        plt.figure(figsize=(10, 8))
+        sns.heatmap(df_data, annot=True, fmt='.3f', cmap='YlOrRd')
+        plt.title('Average Compositions per Cluster')
+        plt.xlabel('Elements')
+        plt.ylabel('Cluster')
+        
+        # Save plot
+        plt.savefig(self.output_dir / 'cluster_compositions.png', dpi=300, bbox_inches='tight')
+        plt.close()
+
+class CompositionDatabase:
+    def __init__(self, database_file: Optional[str] = None):
+        """
+        Initialize database for storing composition-variance data.
+        
+        Args:
+            database_file: Path to existing database file (optional)
+        """
+        self.database_file = database_file
+        self.data = []
+        
+        if database_file and Path(database_file).exists():
+            self.load_database()
+            
+    def add_entry(self, composition: Dict[str, float], variance: float, 
+                 atoms_info: Optional[Dict] = None):
+        """Add new composition entry with variance."""
+        entry = {
+            'composition': composition,
+            'variance': variance,
+            'timestamp': pd.Timestamp.now().isoformat()
+        }
+        if atoms_info:
+            entry.update(atoms_info)
+            
+        self.data.append(entry)
+        self._save_database()
+        
+    def load_database(self):
+        """Load existing database."""
+        with open(self.database_file, 'r') as f:
+            self.data = json.load(f)
+            
+    def _save_database(self):
+        """Save database to file in chunks if necessary."""
+        if self.database_file:
+            # Convert to list of dictionaries for JSON serialization
+            data_to_save = {'compositions': self.data}
+            with open(self.database_file, 'w') as f:
+                json.dump(data_to_save, f)
+
+class CompositionExplorer:
+    def __init__(self, 
+                 model_paths: List[str], 
+                 database_file: str,
+                 output_dir: str,
+                 device: str = 'cpu',
+                 grid_size: int = 125,
+                 n_clusters: int = 10):
+        self.calculator = AdversarialCalculator(
+            model_paths=model_paths,
+            device=device
+        )
+        
+        self.database = CompositionDatabase(database_file)
+        self.grid_size = grid_size
+        self.n_clusters = n_clusters
+        self.visualizer = CompositionVisualizer(output_dir)
+        
+        self.constraints = {
+            'V': (0.696, 1.0),
+            'Cr': (0.008, 0.304),
+            'Ti': (0.008, 0.304),
+            'W': (0.008, 0.304),
+            'Zr': (0.008, 0.304)
+        }
+    
+    def _generate_grid_compositions(self) -> np.ndarray:
+        """Generate discretized composition grid."""
+        step = 1.0 / self.grid_size
+        
+        v_range = np.arange(self.constraints['V'][0], 
+                           self.constraints['V'][1] + step, 
+                           step)
+        
+        compositions = []
+        for v in v_range:
+            remaining = 1.0 - v
+            base_step = step * (remaining / 4)  # 4 other elements
+            
+            for cr in np.arange(self.constraints['Cr'][0], 
+                              min(self.constraints['Cr'][1], remaining), 
+                              base_step):
+                for ti in np.arange(self.constraints['Ti'][0], 
+                                  min(self.constraints['Ti'][1], remaining - cr), 
+                                  base_step):
+                    for w in np.arange(self.constraints['W'][0], 
+                                     min(self.constraints['W'][1], remaining - cr - ti), 
+                                     base_step):
+                        zr = remaining - cr - ti - w
+                        if self.constraints['Zr'][0] <= zr <= self.constraints['Zr'][1]:
+                            compositions.append([v, cr, ti, w, zr])
+        
+        return np.array(compositions)
+    
+    def process_predefined_compositions(self, compositions: List[str]) -> List[Dict[str, float]]:
+        """Process predefined compositions from chemical formulas."""
+        processed_comps = []
+        elements = ['V', 'Cr', 'Ti', 'W', 'Zr']
+        
+        for comp_str in compositions:
+            comp_dict = defaultdict(float)
+            current_element = ''
+            current_number = ''
+            
+            for char in comp_str:
+                if char.isalpha():
+                    if current_element and current_number:
+                        comp_dict[current_element] = float(current_number)
+                    current_element = char
+                    current_number = ''
+                else:
+                    current_number += char
+            
+            if current_element and current_number:
+                comp_dict[current_element] = float(current_number)
+            
+            total = sum(comp_dict.values())
+            comp_dict = {k: v/total for k, v in comp_dict.items()}
+            
+            for elem in elements:
+                if elem not in comp_dict:
+                    comp_dict[elem] = 0.0
+            
+            processed_comps.append(dict(comp_dict))
+        
+        return processed_comps
+
+    def analyze_composition_space(self, 
+                                template_atoms: Atoms,
+                                predefined_compositions: Optional[List[str]] = None
+                                ) -> Tuple[List[Dict[str, float]], np.ndarray, np.ndarray]:
+        """Analyze composition space with optional predefined compositions."""
+        grid_comps = self._generate_grid_compositions()
+        
+        if predefined_compositions:
+            pred_comps = self.process_predefined_compositions(predefined_compositions)
+            pred_array = np.array([[comp[el] for el in ['V', 'Cr', 'Ti', 'W', 'Zr']]
+                                 for comp in pred_comps])
+            grid_comps = np.vstack([grid_comps, pred_array])
+        
+        tsne = TSNE(n_components=2, random_state=42)
+        embedding = tsne.fit_transform(grid_comps)
+        
+        kmeans = KMeans(n_clusters=self.n_clusters, random_state=42)
+        clusters = kmeans.fit_predict(embedding)
+        
+        # Select compositions from each cluster
+        selected_indices = []
+        for i in range(self.n_clusters):
+            cluster_mask = clusters == i
+            cluster_points = grid_comps[cluster_mask]
+            center_idx = np.where(cluster_mask)[0][0]  # Take first point in cluster
+            selected_indices.append(center_idx)
+        
+        self.visualizer.plot_tsne_clusters(embedding, clusters, grid_comps, selected_indices)
+        
+        selected_compositions = [{
+            'V': grid_comps[idx][0],
+            'Cr': grid_comps[idx][1],
+            'Ti': grid_comps[idx][2],
+            'W': grid_comps[idx][3],
+            'Zr': grid_comps[idx][4]
+        } for idx in selected_indices]
+        
+        return selected_compositions, embedding, clusters
 
 def load_historical_compositions(json_file: str) -> Dict[int, List[Dict[str, float]]]:
     """Load compositions from generations 0-3 from JSON file"""
@@ -155,75 +438,6 @@ def process_structures(atoms_list: List[Atoms], historical_comps: Dict[int, List
     
     return new_structures
 
-def _simpleMD(init_conf, temp, calc, fname, s, T):
-    """
-    Perform a simple molecular dynamics (MD) simulation using Langevin dynamics.
-
-    Parameters:
-    init_conf : Atoms object
-        Initial atomic configuration.
-    temp : float
-        Desired temperature for the simulation in Kelvin.
-    calc : Calculator object
-        Calculator to be used for energy and force calculations.
-    fname : str
-        Filename to store the trajectory.
-    s : int
-        Interval for writing frames to the trajectory file.
-    T : int
-        Total number of steps for the MD simulation.
-
-    Returns:
-    None
-    """
-    
-    # Set the calculator
-    init_conf.calc = calc
-
-    #initialize the temperature
-
-    MaxwellBoltzmannDistribution(init_conf, temperature_K=300) #initialize temperature at 300
-    Stationary(init_conf)
-    ZeroRotation(init_conf)
-
-    dyn = Langevin(init_conf, 1.0*units.fs, temperature_K=temp, friction=0.5) #drive system to desired temperature
-
-
-    time_fs = []
-    temperature = []
-    energies = []
-
-    #remove previously stored trajectory with the same name
-    os.system('rm -rfv '+fname)
-
-    fig, ax = pl.subplots(2, 1, figsize=(6,6), sharex='all', gridspec_kw={'hspace': 0, 'wspace': 0})
-
-    def write_frame():
-            dyn.atoms.info['energy_mace'] = dyn.atoms.get_potential_energy()
-            dyn.atoms.arrays['force_mace'] = dyn.atoms.calc.get_forces()
-            dyn.atoms.write(fname, append=True, write_results=False)
-            time_fs.append(dyn.get_time()/units.fs)
-            temperature.append(dyn.atoms.get_temperature())
-            energies.append(dyn.atoms.get_potential_energy()/len(dyn.atoms))
-
-            ax[0].plot(np.array(time_fs), np.array(energies), color="b")
-            ax[0].set_ylabel('E (eV/atom)')
-
-            # plot the temperature of the system as subplots
-            ax[1].plot(np.array(time_fs), temperature, color="r")
-            ax[1].set_ylabel('T (K)')
-            ax[1].set_xlabel('Time (fs)')
-
-            display.clear_output(wait=True)
-            display.display(pl.gcf())
-            time.sleep(0.01)
-
-    dyn.attach(write_frame, interval=s)
-    t0 = time.time()
-    dyn.run(T)
-    t1 = time.time()
-    print("MD finished in {0:.2f} minutes!".format((t1-t0)/60))
-
 
 def simpleMD(init_conf, temp, calc, fname, s, T):
     """
@@ -277,7 +491,6 @@ def simpleMD(init_conf, temp, calc, fname, s, T):
     print(f"MD finished in {(t1-t0)/60:.2f} minutes!")
 
 def main():
-    # Check command line arguments
     if len(sys.argv) != 2:
         print("Usage: python run_md_gen.py <input_xyz_file>")
         sys.exit(1)
@@ -290,42 +503,71 @@ def main():
 
     # Define paths
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    model_dir = os.path.join(base_dir, '../Models/zr-w-v-ti-cr/gen_0_2024-11-06')
-    output_dir = os.path.join(base_dir, '../data/zr-w-v-ti-cr/gen_0_2024-11-06/md_frames')
-    
-    # Create output directory if it doesn't exist
+    model_dir = os.path.join(base_dir, '../Models/zr-w-v-ti-cr/gen_4_2024-11-15')
+    output_dir = os.path.join(base_dir, '../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_frames')
+    database_file = os.path.join(base_dir, '../data/composition_database.json')
+    vis_dir = os.path.join(output_dir, 'visualization')
+
+    # Create output directories
     os.makedirs(output_dir, exist_ok=True)
-    
-    # Load atomic structures from input xyz
+    os.makedirs(vis_dir, exist_ok=True)
+
+    # Load atomic structures
     atoms_list = read(input_xyz, index=':')
     print(f"Loaded {len(atoms_list)} structures from {input_xyz}")
-    
+
+    # gen_4_model_0-11-14_b4_stagetwo_compiled.model
     # Setup MACE models
     model_paths = [
-        f'{model_dir}/gen_0_model_{i}-11-06-fixedtest_stagetwo_compiled.model'
-        for i in range(5)
+        f'{model_dir}/gen_4_model_{i}-11-14_b4_stagetwo_compiled.model'
+        for i in range(3)
     ]
     
+    # Get predefined compositions from input structures
+    predefined_comps = [
+        str(atoms.get_chemical_formula()).replace(" ", "")
+        for atoms in atoms_list
+    ]
+    
+    # Initialize explorer
+    explorer = CompositionExplorer(
+        model_paths=model_paths,
+        database_file=database_file,
+        output_dir=vis_dir,
+        device='cuda',
+        grid_size=125,
+        n_clusters=10
+    )
+    
+    # Run composition space analysis
+    selected_compositions, _, _ = explorer.analyze_composition_space(
+        template_atoms=atoms_list[0],
+        predefined_compositions=predefined_comps
+    )
+    
     # Run MD simulations
-    temperatures = [2000, 3000]
-    for t in temperatures:
-        for i, atoms in enumerate(atoms_list):
-            mace_calc = MACECalculator(
-                model_paths=model_paths, 
-                device='cuda', 
-                default_dtype='float32'
-            )
-            
-            comp = str(atoms.get_chemical_formula()).replace(' ', '')
-            filename = os.path.join(output_dir, f'gen_0_idx-{i}_comp-{comp}_temp-{t}_md.xyz')
+    temperatures = [1000, 2000, 3000]
+    for comp_idx, composition in enumerate(selected_compositions):
+        # Create atoms object with this composition
+        atoms = modify_atoms_composition(atoms_list[0], composition)
+        
+        for t in temperatures:
+            # Create descriptive filename
+            comp_str = '_'.join([f"{k}{v:.3f}" for k, v in composition.items()])
+            filename = os.path.join(output_dir, f'comp_{comp_idx}_{comp_str}_T{t}_md.xyz')
             
             if not os.path.exists(filename):
                 try:
-                    print(f"Running MD for structure {i} at {t}K")
-                    simpleMD(atoms, temp=t, calc=mace_calc, 
+                    print(f"Running MD for composition {comp_idx} at {t}K")
+                    mace_calc = MACECalculator(
+                        model_paths=model_paths,
+                        device='cuda',
+                        default_dtype='float32'
+                    )
+                    simpleMD(atoms, temp=t, calc=mace_calc,
                             fname=filename, s=100, T=1000)
                 except Exception as e:
-                    print(f"Error in MD for structure {i} at {t}K: {str(e)}")
+                    print(f"Error in MD for composition {comp_idx} at {t}K: {str(e)}")
             else:
                 print(f"Skipping {filename} - file already exists")
 
