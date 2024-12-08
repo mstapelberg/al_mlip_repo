@@ -1,0 +1,80 @@
+Loaded 9 structures from ../data/zr-w-v-ti-cr/gen_3_2024-11-11/gen_3_2024-11-11_initial_configs_part7.xyz
+Running committee mace with 3 models
+Running MD for structure 0 at 1000K
+MD finished in 1.32 minutes!
+Running committee mace with 3 models
+Skipping /home/myless/Packages/al_mlip_repo/scripts/../data/zr-w-v-ti-cr/gen_3_2024-11-10/md_frames/gen_0_idx-1_comp-Ti2V106W14Zr2_temp-1000_md.xyz - file already exists
+Running committee mace with 3 models
+Running MD for structure 2 at 1000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 3 at 1000K
+MD finished in 1.27 minutes!
+Running committee mace with 3 models
+Running MD for structure 4 at 1000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 5 at 1000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 6 at 1000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Skipping /home/myless/Packages/al_mlip_repo/scripts/../data/zr-w-v-ti-cr/gen_3_2024-11-10/md_frames/gen_0_idx-7_comp-Cr4Ti3V109W7Zr_temp-1000_md.xyz - file already exists
+Running committee mace with 3 models
+Running MD for structure 8 at 1000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 0 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 1 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 2 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 3 at 2000K
+MD finished in 1.27 minutes!
+Running committee mace with 3 models
+Running MD for structure 4 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 5 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 6 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 7 at 2000K
+MD finished in 1.27 minutes!
+Running committee mace with 3 models
+Running MD for structure 8 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 0 at 3000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 1 at 3000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 2 at 3000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 3 at 3000K
+MD finished in 1.27 minutes!
+Running committee mace with 3 models
+Running MD for structure 4 at 3000K
+MD finished in 1.15 minutes!
+Running committee mace with 3 models
+Running MD for structure 5 at 3000K
+MD finished in 1.14 minutes!
+Running committee mace with 3 models
+Running MD for structure 6 at 3000K
+MD finished in 1.29 minutes!
+Running committee mace with 3 models
+Running MD for structure 7 at 3000K
+MD finished in 1.15 minutes!
+Running committee mace with 3 models
+Running MD for structure 8 at 3000K
+MD finished in 1.28 minutes!

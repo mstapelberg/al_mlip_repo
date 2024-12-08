@@ -1,0 +1,72 @@
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Running MD at 2000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 2.06 minutes!
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T3000_md.xyz
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Running MD at 2000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 2.06 minutes!
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T3000_md.xyz
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Running MD at 2000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 2.06 minutes!
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T3000_md.xyz
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Running MD at 2000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 2.06 minutes!
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T3000_md.xyz
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Running MD at 2000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 2.06 minutes!
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T3000_md.xyz
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Running MD at 2000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 2.06 minutes!
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T3000_md.xyz
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Running MD at 2000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 2.06 minutes!
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T3000_md.xyz
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Running MD at 2000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 2.08 minutes!
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T3000_md.xyz
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T2000_md.xyz
+Task 0: Running MD at 3000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 4.20 minutes!
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T2000_md.xyz
+Task 0: Running MD at 3000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 4.21 minutes!
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T2000_md.xyz
+Task 0: Running MD at 3000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 4.21 minutes!
+Task 0: Found models: ['../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_0-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_1-11-14_b4_stagetwo_compiled.model', '../../Models/zr-w-v-ti-cr/gen_4_2024-11-15/gen_4_model_2-11-14_b4_stagetwo_compiled.model']
+Running committee mace with 3 models
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T1000_md.xyz
+Task 0: Skipping existing file ../../data/zr-w-v-ti-cr/gen_5_2024-11-17/md_output/structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048_T2000_md.xyz
+Task 0: Running MD at 3000K for structure_000_V0.895_Cr0.020_Ti0.011_W0.026_Zr0.048
+MD finished in 4.35 minutes!

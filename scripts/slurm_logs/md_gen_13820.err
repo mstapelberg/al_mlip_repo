@@ -1,0 +1,9 @@
+/home/myless/.mambaforge/envs/mace-11.7/lib/python3.11/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: '/home/myless/.mambaforge/envs/mace-11.7/lib/python3.11/site-packages/torchvision/image.so: undefined symbol: _ZN3c104cuda20CUDACachingAllocator9allocatorE'If you don't plan on using image functionality from `torchvision.io`, you can ignore this warning. Otherwise, there might be something wrong with your environment. Did you have `libjpeg` or `libpng` installed before building `torchvision` from source?
+  warn(
+/home/myless/.mambaforge/envs/mace-11.7/lib/python3.11/site-packages/torch/serialization.py:779: UserWarning: 'torch.load' received a zip file that looks like a TorchScript archive dispatching to 'torch.jit.load' (call 'torch.jit.load' directly to silence this warning)
+  warnings.warn("'torch.load' received a zip file that looks like a TorchScript archive"
+/home/myless/.mambaforge/envs/mace-11.7/lib/python3.11/site-packages/torch/nn/modules/module.py:1194: UserWarning: operator() sees varying value in profiling, ignoring and this should be handled by GUARD logic (Triggered internally at ../torch/csrc/jit/codegen/cuda/parser.cpp:3668.)
+  return forward_call(*input, **kwargs)
+/home/myless/.mambaforge/envs/mace-11.7/lib/python3.11/site-packages/torch/nn/modules/module.py:1194: UserWarning: operator() profile_node %2643 : int[] = prim::profile_ivalue(%2641)
+ does not have profile information (Triggered internally at ../torch/csrc/jit/codegen/cuda/graph_fuser.cpp:105.)
+  return forward_call(*input, **kwargs)

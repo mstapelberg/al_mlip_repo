@@ -1,0 +1,80 @@
+Loaded 9 structures from ../data/zr-w-v-ti-cr/gen_3_2024-11-11/gen_3_2024-11-11_initial_configs_part1.xyz
+Running committee mace with 3 models
+Running MD for structure 0 at 1000K
+MD finished in 1.33 minutes!
+Running committee mace with 3 models
+Running MD for structure 1 at 1000K
+MD finished in 1.29 minutes!
+Running committee mace with 3 models
+Running MD for structure 2 at 1000K
+MD finished in 1.29 minutes!
+Running committee mace with 3 models
+Running MD for structure 3 at 1000K
+MD finished in 1.30 minutes!
+Running committee mace with 3 models
+Running MD for structure 4 at 1000K
+MD finished in 1.29 minutes!
+Running committee mace with 3 models
+Running MD for structure 5 at 1000K
+MD finished in 1.29 minutes!
+Running committee mace with 3 models
+Running MD for structure 6 at 1000K
+MD finished in 1.30 minutes!
+Running committee mace with 3 models
+Running MD for structure 7 at 1000K
+MD finished in 1.16 minutes!
+Running committee mace with 3 models
+Running MD for structure 8 at 1000K
+MD finished in 1.30 minutes!
+Running committee mace with 3 models
+Running MD for structure 0 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 1 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Skipping /home/myless/Packages/al_mlip_repo/scripts/../data/zr-w-v-ti-cr/gen_3_2024-11-10/md_frames/gen_0_idx-2_comp-Cr3Ti9V105W5Zr2_temp-2000_md.xyz - file already exists
+Running committee mace with 3 models
+Running MD for structure 3 at 2000K
+MD finished in 1.29 minutes!
+Running committee mace with 3 models
+Running MD for structure 4 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 5 at 2000K
+MD finished in 1.29 minutes!
+Running committee mace with 3 models
+Running MD for structure 6 at 2000K
+MD finished in 1.29 minutes!
+Running committee mace with 3 models
+Running MD for structure 7 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 8 at 2000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 0 at 3000K
+MD finished in 1.27 minutes!
+Running committee mace with 3 models
+Running MD for structure 1 at 3000K
+MD finished in 1.16 minutes!
+Running committee mace with 3 models
+Skipping /home/myless/Packages/al_mlip_repo/scripts/../data/zr-w-v-ti-cr/gen_3_2024-11-10/md_frames/gen_0_idx-2_comp-Cr3Ti9V105W5Zr2_temp-3000_md.xyz - file already exists
+Running committee mace with 3 models
+Running MD for structure 3 at 3000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 4 at 3000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 5 at 3000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 6 at 3000K
+MD finished in 1.28 minutes!
+Running committee mace with 3 models
+Running MD for structure 7 at 3000K
+MD finished in 1.27 minutes!
+Running committee mace with 3 models
+Running MD for structure 8 at 3000K
+MD finished in 1.27 minutes!
